@@ -24,7 +24,10 @@ struct ContentView: View {
                     Label("Details", systemImage: "doc.text")
                 }
             
-            
+            CountryNews(countryCode: selectedCountryCode)
+                .tabItem {
+                    Label("News", systemImage: "newspaper")
+                }
             
         }
     }
