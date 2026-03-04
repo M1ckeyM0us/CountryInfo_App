@@ -50,7 +50,8 @@ struct CountryNews: View {
     func loadNews() {
         NewsService().loadNews(countryCode: countryCode)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        // Check repeatedly until data loads
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.articles = NewsService.newsArticles
         }
     }
