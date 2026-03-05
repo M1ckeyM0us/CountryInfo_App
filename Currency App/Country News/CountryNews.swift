@@ -17,6 +17,10 @@ struct CountryNews: View {
         NavigationView {
             VStack {
                 
+                Text("Country News")
+                    .font(.largeTitle)
+                    .bold()
+                
                 Button("Load News") {
                     loadNews()
                 }
@@ -27,30 +31,50 @@ struct CountryNews: View {
                 
                 List(articles, id: \.self) { article in
                     
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        
+                        // Had to use chatgpt to figure out how to put that image there
+                        if let imageUrl = getImage(article) {
+                            AsyncImage(url: URL(string: imageUrl)) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .frame(height: 180)
+                            .clipped()
+                            .cornerRadius(8)
+                        }
                         
                         Text(getTitle(article))
                             .font(.headline)
                         
-                        Text(getSource(article))
+                        Text("Author: \(getAuthor(article))")
                             .font(.subheadline)
                             .foregroundColor(.gray)
                         
                         Text(getDescription(article))
                             .font(.body)
                             .lineLimit(3)
+                        
+                        Text("Published: \(getDate(article))")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        
+                        Text(getSource(article))
+                            .font(.caption2)
+                            .foregroundColor(.blue)
                     }
                     .padding(.vertical, 5)
                 }
             }
-            .navigationTitle("Country News")
         }
     }
     
     func loadNews() {
         NewsService().loadNews(countryCode: countryCode)
         
-        // Check repeatedly until data loads
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.articles = NewsService.newsArticles
         }
@@ -60,8 +84,20 @@ struct CountryNews: View {
         return article["title"] as? String ?? "No Title"
     }
     
+    func getAuthor(_ article: NSDictionary) -> String {
+        return article["author"] as? String ?? "Unknown"
+    }
+    
     func getDescription(_ article: NSDictionary) -> String {
         return article["description"] as? String ?? "No Description"
+    }
+    
+    func getImage(_ article: NSDictionary) -> String? {
+        return article["urlToImage"] as? String
+    }
+    
+    func getDate(_ article: NSDictionary) -> String {
+        return article["publishedAt"] as? String ?? "Unknown Date"
     }
     
     func getSource(_ article: NSDictionary) -> String {
@@ -70,4 +106,5 @@ struct CountryNews: View {
         }
         return "Unknown Source"
     }
+    
 }
