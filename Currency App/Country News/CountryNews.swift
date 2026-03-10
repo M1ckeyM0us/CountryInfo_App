@@ -33,7 +33,7 @@ struct CountryNews: View {
                     
                     VStack(alignment: .leading, spacing: 10) {
                         
-                        // Had to use chatgpt to figure out how to put that image there
+                        // Had to googlefu to figure out how to put that image there
                         if let imageUrl = getImage(article) {
                             AsyncImage(url: URL(string: imageUrl)) { image in
                                 image
@@ -65,6 +65,7 @@ struct CountryNews: View {
                         Text(getSource(article))
                             .font(.caption2)
                             .foregroundColor(.blue)
+                        
                     }
                     .padding(.vertical, 5)
                 }
@@ -100,6 +101,7 @@ struct CountryNews: View {
         return article["publishedAt"] as? String ?? "Unknown Date"
     }
     
+    //gets a name of the source or "website"
     func getSource(_ article: NSDictionary) -> String {
         if let source = article["source"] as? NSDictionary {
             return source["name"] as? String ?? "Unknown Source"
