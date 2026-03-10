@@ -11,6 +11,7 @@ struct SearchView: View {
     
     @State var countryName = ""
     @Binding var selectedCountryCode: String
+    @Binding var favorites: [String]
     
     // Filters the country
     var filteredCountries: [(key: String, value: String)] {
@@ -39,11 +40,30 @@ struct SearchView: View {
                     .padding()
                 
                 List(filteredCountries, id: \.key) { country in
-                    Button(country.value) {
-                        selectedCountryCode = country.key
-                        countryName = country.value
-                        //CountryService().loadCountry(countryCode: country.key)
-                        //NewsService().loadNews(countryCode: country.value)
+                    HStack{
+                        Button(country.value) {
+                            selectedCountryCode = country.key
+                            countryName = country.value
+                            //CountryService().loadCountry(countryCode: country.key)
+                            //NewsService().loadNews(countryCode: country.value)
+                        }
+                        
+                        Spacer()
+                        
+                        Button{
+                            if let index = favorites.firstIndex(of: country.key) {
+                                favorites.remove(at: index)
+                            } else {
+                                favorites.append(country.key)
+                                
+                            }
+                            
+                            
+                        } label:{
+                            Image(systemName: favorites.contains(country.key) ? "star.fill" : "star")
+                                .foregroundStyle(.yellow)
+                        }
+                        .buttonStyle(.borderless)
                     }
                 }
                 

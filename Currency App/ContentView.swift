@@ -10,11 +10,12 @@ import SwiftUI
 struct ContentView: View {
     
     @State var selectedCountryCode = "US"
+    @State var favorites: [String] = []
     
     var body: some View {
         TabView {
             
-            SearchView(selectedCountryCode: $selectedCountryCode)
+            SearchView(selectedCountryCode: $selectedCountryCode, favorites: $favorites)
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")
                 }
@@ -27,6 +28,11 @@ struct ContentView: View {
             CountryNews(countryCode: selectedCountryCode)
                 .tabItem {
                     Label("News", systemImage: "newspaper")
+                }
+            
+            FavoriteView(favorites: $favorites, selectedCountryCode: $selectedCountryCode)
+                .tabItem {
+                    Label("Favorites", systemImage: "star")
                 }
             
         }
