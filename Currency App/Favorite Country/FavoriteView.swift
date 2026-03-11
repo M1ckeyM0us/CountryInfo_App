@@ -20,8 +20,12 @@ struct FavoriteView: View {
                 HStack {
                     
                     // select the country
-                    Button(countriesDict[code] ?? code) {
+                    Button {
                         selectedCountryCode = code
+                    }
+                    label: {
+                        Text(countriesDict[code] ?? code)
+                            .foregroundStyle(.white)
                     }
                     
                     Spacer()
